@@ -3,7 +3,7 @@
 
 - I manually wrote the 14_time_distribution_sliced.tex file while referring to 08_rest.tex because the content was less.
 
-- After using Overleaf to write the beamer code, I ran the commands locally (I used TeX Live on WSL for this) to make sure everything was working locally as well.
+- After using Overleaf to write the beamer code, I ran the commands locally (I used TeX Live on WSL for this because I already had it installed locally) to make sure everything was in order.
 
 - If there was more content, I could unzip the .odp file (14_time_distribution_sliced.odp) and extract the text from content.xml using VSCode XML tools to create an XML tree for better visualization.
 
