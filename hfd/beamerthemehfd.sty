@@ -1,0 +1,287 @@
+\mode<presentation>
+
+% Requirements
+\RequirePackage{tikz}
+\RequirePackage{etoolbox}
+
+% Settings
+\usecolortheme{hfd}
+\usefonttheme{hfd}
+\useoutertheme{hfd}
+\useinnertheme{hfd}
+
+\setbeamertemplate{navigation symbols}{}				% Disable navigation symbols
+\setbeamertemplate{blocks}[rounded][shadow=true] 
+
+
+%%
+%% Configure the bibtex references list style.
+%%
+\setbeamertemplate{bibliography item}{\insertbiblabel}	% Create labeled bibtex entries.
+
+
+%%
+%% Put everthing on top, instead of in the
+%% middle of a frame.
+%%
+\beamer@centeredfalse
+
+% Some code
+
+%%
+%% Adding a list (itemize, enumerate) in
+%% a minipage environment leads to some
+%% additional space before the list.
+%% This command removes that little
+%% space.
+%%
+\newcommand{\nospace}{\vspace*{-1.6mm}}
+
+%%
+%% A command that fills the slide to
+%% the bottom.
+%%
+\newcommand{\sfill}{\vskip0pt plus 1filll}
+
+%%
+%% A modified itemize environment to avoid
+%% the top spacing at the beginning of
+%% the original environment. This saves
+%% some space on the frames.
+%%
+%% NOTE: The problem only appears in 
+%% minipage environments.
+%%
+%\BeforeBeginEnvironment{itemize}{%
+%    \ifnum \@itemdepth=0%
+%      \vspace*{-\topsep}%
+%    \fi
+%}
+%\AfterEndEnvironment{itemize}{%
+%    \ifnum \@itemdepth=0%
+%      \vspace*{\topsep}%
+%    \fi
+%}
+
+%%
+%% A new environemnt that behaves like
+%% like the original itemize environment.
+%%
+%\newenvironment{itemize*}% 
+%  {\ifnum \@itemdepth=0%
+%      \vspace*{\topsep}%
+%    \fi
+%    \begin{itemize}}%
+%  {\end{itemize}%
+%    \ifnum \@itemdepth=0%
+%      \vspace*{-\topsep}%
+%    \fi}
+
+
+%%
+%% A new environment that allows to
+%% remove the sidebar at any frame.
+%% Just put the frame inside the
+%% environment.
+%% 
+%%  DOES NOT WORK HERE!
+%%
+%\makeatletter
+%\newenvironment{nosidebar}{
+%  \ifdim\beamer@paperwidth=16.00cm\relax%
+%    \ifdim\beamer@paperheight=9.00cm\relax%
+%      \setbeamertemplate{sidebar right}{}
+%      \advance\textwidth by \beamer@rightsidebar
+%      \advance\hsize by \beamer@rightsidebar
+%    \fi
+%  \fi
+%}{}
+%\makeatother
+
+
+%
+%
+% The \degree command
+%
+%
+\newcommand{\degree}{\@dblarg\beamer@degree}
+\long\def\beamer@degree[#1]#2{%
+  \def\insertdegree{#2}%
+  \def\beamer@shortdegree{#1}%
+  }
+\degree{}
+
+\newcommand\insertshortdegree[1][]{%
+  \beamer@setupshort{#1}%
+  \let\thanks=\@gobble%
+  \ifnum\c@page=1%
+    \hyperlinkpresentationend{\beamer@insertshort{\beamer@shortdegree}}%
+  \else%
+    \hyperlinkpresentationstart{\beamer@insertshort{\beamer@shortdegree}}%
+  \fi}
+
+
+
+\mode
+<article>
+{
+  \let\beamer@origdegree=\degree
+  \renewcommand{\degree}[2][]{\beamer@origdegree{#2}}
+}
+
+
+%%
+%% A minipage with background picture.
+%%
+\newsavebox\MBox
+\newenvironment{SidebarArrow}[1]
+  {\par\smallskip\begin{lrbox}{\MBox}\begin{minipage}[l][6mm][c]{#1}}
+  {\end{minipage}\end{lrbox}%
+   \makebox(0,0){\put(0,0){%
+     \includegraphics[width=\wd\MBox,height=2\ht\MBox]{gfx/sidebar_arrow}}}%
+   \usebox\MBox\par%
+  }
+
+\newenvironment{SidebarArrowLight}[1]
+  {\par\smallskip\begin{lrbox}{\MBox}\begin{minipage}[l][6mm][c]{#1}}
+  {\end{minipage}\end{lrbox}%
+   \makebox(0,0){\put(0,0){%
+     \includegraphics[width=\wd\MBox,height=2\ht\MBox]{gfx/sidebar_arrow_shaded}}}%
+   \usebox\MBox\par%
+  }
+
+
+%%
+%% My sidebar navigation
+%%
+%% TODO: Add navigation
+%% TODO: Ignore \section*
+%%
+\def\insertsidebarnavigation#1{%
+  \hbox to #1{%
+  %\framebox[#1][l]{%
+  \vbox{
+    \usebeamerfont{section in sidebar}
+    \vskip0.5625ex%
+    \def\slideentry##1##2##3##4##5##6{}%
+    \def\sectionentry##1##2##3##4##5{%
+    \ifnum##5=\c@part%
+      \def\insertsectionhead{##2}%
+      \def\insertsectionheadnumber{##1}%
+      \def\insertpartheadnumber{##5}%
+      \vskip1ex
+      \ifnum\c@section=##1%
+        \begin{SidebarArrow}{2.8cm}
+          \vspace*{1.5mm}
+          \hspace*{3mm}
+          \begin{minipage}{2.3cm}
+            %\hyperlink{Navigation##3}{
+               \begin{flushleft}
+                 {\usebeamercolor[fg]{section in sidebar}##2}
+               \end{flushleft}
+             %}
+           \end{minipage}
+         \end{SidebarArrow}
+       \else%
+         \begin{SidebarArrowLight}{2.8cm}
+           \vspace*{1.5mm}
+           \hspace*{3mm}
+           \begin{minipage}{2.3cm}
+             %\hyperlink{Navigation##3}{
+               \begin{flushleft}
+                 {\usebeamercolor[bg]{section in sidebar}##2}
+               \end{flushleft}
+             %}
+           \end{minipage}
+         \end{SidebarArrowLight}
+      \fi
+    \fi
+    }%
+    \dohead\vskip0.5625ex}\hfil
+  }
+  \vfil
+}
+
+
+%%
+%% My version of \insertsectionnavigation
+%%
+\def\insertmysectionnavigation#1{%
+  \vspace*{0.6mm}\hspace*{-5.6mm}
+  \hbox to #1{%
+  %\framebox[#1]{
+    \vbox{{\usebeamerfont{section in head/foot}\usebeamercolor[fg]{section in head/foot}%
+    \vskip0.5625ex%
+     \def\slideentry##1##2##3##4##5##6{}%
+     \def\sectionentry##1##2##3##4##5{%
+       \ifnum##5=\c@part%
+       \def\insertsectionhead{##2}%
+       \def\insertsectionheadnumber{##1}%
+       \def\insertpartheadnumber{##5}%
+       \setbox\beamer@tempbox=\hbox{%
+         \hyperlink{Navigation##3}{\hbox to #1{%
+             \hskip0.3cm%
+             \ifnum\c@section=##1%
+               %{\usebeamertemplate{section in head/foot}}%
+               \begin{minipage}{#1}
+                 \hyperlink{Navigation##3}{
+                   {\usebeamercolor[fg]{section in main}##2}
+                 }
+               \end{minipage}
+             \else%
+               %{\usebeamertemplate{section in head/foot shaded}}%
+               \begin{minipage}{#1}
+                 \hyperlink{Navigation##3}{
+                   {\usebeamercolor[bg]{section in main}##2}
+                 }
+               \end{minipage}
+             \fi\hskip0.3cm}}}%
+       \ht\beamer@tempbox=1.6875ex\dp\beamer@tempbox=0.75ex%
+       \box\beamer@tempbox\fi}%
+     \dohead\vskip0.5625ex}}\hfil}}
+
+
+%%
+%% Check for the ratio of the presentation,
+%% i.e. if it is 4:3 or 16:9.
+%%
+\makeatletter
+\renewcommand\ifratio[3]{%
+\ifnum#1=169%
+    \ifdim\beamer@paperwidth=16.00cm\relax%
+        \ifdim\beamer@paperheight=9.00cm\relax%
+            #2%
+        \else%
+            #3%
+        \fi%
+    \else%
+        #3%
+    \fi%
+\else%
+    \ifnum#1=43%
+        \ifdim\beamer@paperwidth=12.80cm\relax%
+            \ifdim\beamer@paperheight=9.60cm\relax%
+                #2%
+            \else%
+                #3%
+            \fi%
+        \else%
+            #3%
+        \fi%
+    \fi%
+\fi%
+}
+\makeatother
+
+%%
+%% A new environment for slides without
+%% the sidebar, e.g. the title slide
+%%
+%\makeatletter
+%\newenvironment{nosidebar} {
+%	\hoffset=-\beamer@sidebarwidth
+%	\advance\textwidth by \beamer@sidebarwidth
+%}{}
+%\makeatother
+
+\mode<all>

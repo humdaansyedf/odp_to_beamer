@@ -1,0 +1,23 @@
+\documentclass{beamer}
+\usepackage{graphicx}
+\usepackage{tikz}
+\usetikzlibrary{positioning}
+
+\begin{document}
+
+\begin{frame}{Test Image + Graph}
+
+\begin{tikzpicture}[remember picture, overlay]
+  \node[anchor=north east, xshift=-1cm, yshift=-1cm] at (current page.north east)
+    {\includegraphics[width=2cm]{client.jpg}};
+\end{tikzpicture}
+
+\begin{tikzpicture}
+  \draw[->] (0,0) -- (3,0) node[right] {X-axis};
+  \draw[->] (0,0) -- (0,3) node[above] {Y-axis};
+  \draw[red, thick] (0,0) -- (2,2) node[right] {Line};
+\end{tikzpicture}
+
+\end{frame}
+
+\end{document}

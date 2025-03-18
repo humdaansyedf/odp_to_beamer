@@ -1,0 +1,172 @@
+\mode<presentation>
+
+
+%%
+%% Some useful code.
+%%
+
+%%
+%% Check for the ratio of the presentation,
+%% i.e. if it is 4:3 or 16:9.
+%%
+\newcommand\ifratio[3]{%
+\ifnum#1=169%
+    \ifdim\beamer@paperwidth=16.00cm\relax%
+        \ifdim\beamer@paperheight=9.00cm\relax%
+            #2%
+        \else%
+            #3%
+        \fi%
+    \else%
+        #3%
+    \fi%
+\else%
+    \ifnum#1=43%
+        \ifdim\beamer@paperwidth=12.80cm\relax%
+            \ifdim\beamer@paperheight=9.60cm\relax%
+                #2%
+            \else%
+                #3%
+            \fi%
+        \else%
+            #3%
+        \fi%
+    \fi%
+\fi%
+}
+
+
+%%
+%% Load additional packages if not
+%% loaded before.
+%%
+\RequirePackage{calc}
+
+\definecolor{DarkBlue}{rgb}{0.1,0.1,0.5}
+\definecolor{LightBlue}{rgb}{0.1,0.1,0.5}
+\setbeamercolor{wb}{fg=white,bg=DarkBlue}
+\setbeamercolor{sb}{fg=white,bg=black}
+\setbeamercolor{fb}{fg=white,bg=red}
+\setbeamercolor{sib}{fg=black,bg=yellow}
+
+
+%%
+%% The configuration of the backgrounds.
+%% So far, no background.
+%%
+\defbeamertemplate*{background}{hsfd} {
+}
+
+
+%%
+%% The configuration of the headline,
+%% that resides above the frame title.
+%% So far, no headline.
+%%
+\defbeamertemplate*{headline}{hsfd} {
+}
+
+
+%%
+%% The configuration of the frame title.
+%%
+\defbeamertemplate*{frametitle}{hsfd} {
+  \begin{beamercolorbox}[wd=\paperwidth,ht=8mm,left,leftskip=4mm]{white}
+    \usebeamercolor[fg]{text in header}
+    %\vbox to8mm{\vfil\hbox{\usebeamerfont{title in head}\insertframetitle{}}\vfil}
+    \vspace*{2.8mm}{\usebeamerfont{title in head}\insertframetitle{}}
+    \usebeamercolor[fg]{line in header}
+    \vspace*{-0.7cm}
+    \rule{\paperwidth-8mm}{0.1mm}
+  \end{beamercolorbox}
+}
+
+
+%%
+%% The configuration of the right side bar.
+%% Only show sidebar at 16:9 aspect ratio.
+%% 16:9 has a size of 160 to 90 mm.
+%% 4:3  has a size of 128 to 96 mm
+%%
+\ifratio{169}{
+    \setbeamersize{sidebar width right=0.20\paperwidth}
+    \defbeamertemplate*{sidebar right}{hsfd} {
+      \ifnum\theframenumber=1
+        % No sidebar on the first frame
+      \else
+        \vspace*{1.1cm}
+        \begin{beamercolorbox}[wd=2.8cm,ht=7.2cm]{white}
+          \vbox to 7.2cm{
+            \insertsidebarnavigation{2.8cm}
+          }
+        \end{beamercolorbox}
+      \fi
+    }
+}{}
+
+
+%%
+%% Configuration of the footer. Distinguish between
+%% the footer of the first (title) slide and all
+%% other slides.
+%%
+%% TODO: Modifiy footer for 'handout'
+%% 
+\defbeamertemplate*{footline}{hsfd} {
+  \ifnum\theframenumber=1
+    % Special footer on title frame.
+    \begin{beamercolorbox}[wd=\paperwidth,ht=5mm,left,leftskip=4mm]{yellow}
+      % Include the h_da logo.
+      %{\unitlength=1mm\put(138,1.8){\includegraphics[width=1.5cm]{gfx/HsH_Logo}}}
+      % The rest of the footer.
+      \usebeamercolor[fg]{text in footer} {
+        \usebeamercolor[fg]{line in footer}
+        \hspace*{-1.5mm}
+        \rule{\paperwidth-8mm}{0.2mm}
+      }
+      \hspace*{-5mm}
+      \vbox to 5mm {
+        \vfil
+	\ifratio{169}{%
+        	\makebox[125mm][l]{\usebeamerfont{text in footer}\textcopyright{} \insertshortdate{} \insertshortauthor}%
+	        \makebox[28mm][r]{\usebeamerfont{text in footer}\insertdegree}
+	}{%
+		\makebox[92.5mm][l]{\usebeamerfont{text in footer}\textcopyright{} \insertshortdate{} \insertshortauthor}%
+	        \makebox[28mm][r]{\usebeamerfont{text in footer}\insertdegree}
+	}%
+        \vfil
+      }
+    \end{beamercolorbox}
+  \else
+    % Standard footer on every other frame.
+    \begin{beamercolorbox}[wd=\paperwidth,ht=5mm,left,leftskip=4mm]{hsfd_red}
+      \usebeamercolor[fg]{text in footer} {
+        \usebeamercolor[fg]{line in footer}
+        \hspace*{-1.5mm}
+        \rule{\paperwidth-8mm}{0.2mm}
+      }
+      \hspace*{-5mm}
+      \vbox to 5mm {
+        \vfil
+    	\ifratio{169}{%
+	        \makebox[45mm][l]{\usebeamerfont{text in footer}\textcopyright{} \insertshortdate{} \insertshortauthor}%
+            \makebox[\paperwidth-45mm-12mm-7mm-28mm-8mm][l]{\usebeamerfont{text in footer}\inserttitle{}: \insertshortsubtitle}%
+            \makebox[10mm][r]{\usebeamerfont{text in footer}\insertdate}%
+            \makebox[7mm][c]{\usebeamerfont{text in footer}\insertframenumber}%
+            \makebox[3mm][r]{}%
+            \makebox[28mm][r]{\usebeamerfont{text in footer}\insertdegree}
+	}{%
+	    \makebox[27mm][l]{\usebeamerfont{text in footer}\textcopyright{} \insertshortdate{} \insertshortauthor}%
+        \makebox[\paperwidth-27mm-10mm-5mm-28mm-8mm][c]{\usebeamerfont{text in footer}\insertshorttitle{}: \insertshortsubtitle}%
+        \makebox[7mm][r]{\usebeamerfont{text in footer}\insertdate}%
+        \makebox[5mm][c]{\usebeamerfont{text in footer}\insertframenumber}%
+        \makebox[3mm][r]{}%
+        \makebox[28.5mm][r]{\usebeamerfont{text in footer}\insertdegree}
+	}%
+        \vfil
+      }
+    \end{beamercolorbox}
+  \fi
+}
+
+\mode<all>

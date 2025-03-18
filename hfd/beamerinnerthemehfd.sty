@@ -1,0 +1,155 @@
+\mode<presentation>
+
+%%
+%% The title page
+%%
+\defbeamertemplate*{title page}{hsfd} {
+  % Remove the sidebar and center the frame.
+  \makeatletter
+  \ifdim\beamer@paperwidth=16.00cm\relax%
+    \ifdim\beamer@paperheight=9.00cm\relax%
+      \setbeamertemplate{sidebar right}{}
+      \advance\textwidth by \beamer@rightsidebar
+      \advance\hsize by \beamer@rightsidebar
+    \fi
+  \fi
+  \makeatother
+  % Title and subtitle
+  \begin{beamercolorbox}[wd=\textwidth]{White}
+      \vskip0mm
+      {\centering
+        \usebeamerfont{title}\usebeamercolor[fg]{title}\inserttitle
+        \par
+      }
+      \vskip2mm%
+      {\centering
+        \usebeamerfont{subtitle}\usebeamercolor[fg]{subtitle}\insertsubtitle
+        \par
+      }
+    \vfill
+  \end{beamercolorbox}
+  % Picture
+  \begin{beamercolorbox}[]{white}
+    \begin{center}
+      \includegraphics[height=4.5cm]{gfx/title}
+    \end{center}
+  \end{beamercolorbox}
+  % Author
+  \vspace*{-3mm}
+  \begin{beamercolorbox}[wd=\textwidth]{White}
+    \begin{center}
+      {\usebeamerfont{author on title}\usebeamercolor[fg]{author on title}\insertauthor}
+    \end{center}
+  \end{beamercolorbox}
+}
+
+
+%%
+%% A section page that may be automatically
+%% inserted before every new section.
+%% 
+\defbeamertemplate*{section page}{hsfd}{
+  % Re-establish the header.
+  \vspace*{-2mm}
+  \begin{beamercolorbox}[wd=\paperwidth,ht=8mm,left,leftskip=4mm]{red}
+    \usebeamercolor[fg]{text in header}
+    \vbox to8mm{\vfil\hbox{\usebeamerfont{title in header}Outline (Section)}\vfil}
+    \usebeamercolor[fg]{line in header}
+    \vspace*{-5.4mm}
+    \rule{\paperwidth-8mm}{0.1mm}
+  \end{beamercolorbox}
+
+  \vspace*{3.6mm}\hspace*{-1.3mm}
+  % Now, the actual content of the page.
+  \insertmysectionnavigation{8cm}
+}
+
+
+%%
+%% A subsection page that may be automatically
+%% inserted before every new subsection.
+%% 
+\defbeamertemplate*{subsection page}{hsfd}{
+  % Re-establish the header.
+  \vspace*{-2mm}
+  \begin{beamercolorbox}[wd=\paperwidth,ht=8mm,left,leftskip=4mm]{red}
+    \usebeamercolor[fg]{text in header}
+    \vbox to8mm{\vfil\hbox{\usebeamerfont{title in header}Outline (Sub-Section)}\vfil}
+    \usebeamercolor[fg]{line in header}
+    \vspace*{-5.4mm}
+    \rule{\paperwidth-8mm}{0.1mm}
+  \end{beamercolorbox}
+}
+
+
+%%
+%% My own toc section using
+%% itemize to display the
+%% table of content
+%%
+\defbeamertemplate*{section in toc}{hsfd}{
+  \begin{itemize}
+    \item \inserttocsection\par
+  \end{itemize}
+}
+
+
+%%
+%% My own toc section using
+%% itemize to display the
+%% table of content
+%%
+\defbeamertemplate*{subsection in toc}{hsfd}{
+	\begin{itemize}
+		\item[]
+		
+		\begin{itemize}	
+			\item \inserttocsubsection\par
+		\end{itemize}
+	\end{itemize}
+}
+
+
+%%
+%% Redefine the footnote style. I.e. font size
+%% is \tiny (instead of \footnotesize) and
+%% text is left aligned.
+%%
+\makeatletter
+\renewcommand<>\beamer@framefootnotetext[1]{%
+	\global\setbox\beamer@footins\vbox{%
+		\hsize\framewidth
+		\textwidth\hsize
+		\columnwidth\hsize
+		\unvbox\beamer@footins
+		\reset@font\tiny
+		\@parboxrestore
+		\protected@edef\@currentlabel
+		{\csname p@footnote\endcsname\@thefnmark}%
+		\color@begingroup
+		\uncover#2{\@makefntext{%
+				\rule\z@\footnotesep\ignorespaces\parbox[t]{.9\textwidth}{#1\@finalstrut\strutbox}\vskip1sp}}%
+		\color@endgroup}%
+}
+\makeatother
+
+
+%%
+%% The itemize symbols.
+%%
+\setbeamertemplate{itemize items}[square]
+
+%%
+%% The enumerate symbols.
+%%
+\defbeamertemplate*{enumerate item}{hsfd}{
+	\usebeamerfont*{item projected}%
+	\usebeamercolor[bg]{enumerate item}%
+	\begin{pgfpicture}{-1ex}{-0.6ex}{1ex}{2ex}
+		\pgfpathcircle{\pgfpoint{0pt}{0.8ex}}{1.6ex}
+		\pgfusepath{stroke}
+		\pgftext[base]{\usebeamercolor[fg]{enumerate item}\insertenumlabel}
+	\end{pgfpicture}%
+}
+
+\mode<all>
